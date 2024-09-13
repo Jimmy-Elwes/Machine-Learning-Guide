@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>James Elwes Interactive Resume</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .section {
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .section h2 {
+            cursor: pointer;
+        }
+        .content {
+            display: none;
+            margin-top: 10px;
+        }
+        .open .content {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>James (Jimmy) Elwes</h1>
+    <p>561 Kosciuszko Street, Brooklyn, NY 11221 | 347-248-3908 | <a href="mailto:jimmyelwes@outlook.com">jimmyelwes@outlook.com</a></p>
+    <p><a href="https://www.linkedin.com/in/jimmy-elwes">LinkedIn Profile</a></p>
+
+    <div class="section">
+        <h2>Professional Summary</h2>
+        <div class="content">
+            <p>As a seasoned Analyst with a comprehensive background in data analytics, statistics, strategic decision-making, and financial analysis...</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Skills</h2>
+        <div class="content">
+            <ul>
+                <li>SQL, Python, R</li>
+                <li>Tableau, Looker, Domo</li>
+                <li>Advanced PowerPoint and Excel</li>
+                <li>AB Testing</li>
+                <li>Data & Statistical Analysis</li>
+                <li>Risk Management</li>
+                <li>Financial Modeling</li>
+                <li>Complex Problem Solving</li>
+                <li>Strong Written and Verbal Communication</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Professional Experience</h2>
+        <div class="content">
+            <h3>Senior Analyst - Miniclip (June 2022 – October 2023)</h3>
+            <ul>
+                <li>Led data-driven analysis using Excel, R, and Python...</li>
+                <li>Developed and implemented data-driven visualizations...</li>
+            </ul>
+
+            <h3>Investment Analyst - Careers and Enterprise Company (March 2019 – September 2021)</h3>
+            <ul>
+                <li>Developed analytical strategies for investment funds...</li>
+            </ul>
+
+            <h3>Senior Financial Analyst - Gamma (November 2016 – March 2019)</h3>
+            <ul>
+                <li>Promoted to a senior role within a year...</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Additional Projects</h2>
+        <div class="content">
+            <p>Website: <a href="https://www.fpldatamerchant.com">fpldatamerchant.com</a></p>
+            <p>Developing a comprehensive sports data platform showcasing dynamic visualizations...</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>About Me & Interests</h2>
+        <div class="content">
+            <p>I enjoy team sports like football, rugby, and kickboxing...</p>
+        </div>
+    </div>
+
+    <script>
+        // Add collapsible functionality to each section
+        const sections = document.querySelectorAll('.section h2');
+        sections.forEach(section => {
+            section.addEventListener('click', function() {
+                this.parentElement.classList.toggle('open');
+            });
+        });
+    </script>
+
+</body>
+</html>
