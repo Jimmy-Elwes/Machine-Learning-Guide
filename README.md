@@ -1,2 +1,2 @@
-# Machine-Learning-Guide
-A guide to perform machine learning
+# My Resume
+An interactive resume that can be shared with anyone
