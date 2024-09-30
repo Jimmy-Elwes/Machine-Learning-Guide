@@ -8610,88 +8610,89 @@ pre.code {
 	font-family: 'Courier New', monospace;
 }
 
-
 #navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background-color: #c3c3c9; /* Background color */
-    z-index: 1000; /* Ensure it stays on top of other elements */
-    box-shadow: 0 2px 5px rgba(70, 57, 170, 0.1); /* Optional: Add a shadow for better visibility */
+	position: fixed;
+	top: 0;
+	width: 100%;
+	background-color: #c3c3c9; /* Background color */
+	z-index: 1000; /* Ensure it stays on top of other elements */
+	box-shadow: 0 2px 5px rgba(70, 57, 170, 0.1); /* Optional: Add a shadow for better visibility */
 }
 
 #navbar ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-wrap: wrap; /* Allow items to wrap to the next line if needed */
 }
 
 #navbar ul li {
-    margin-right: 0;
-    position: relative; /* Needed for submenu positioning */
+	margin-right: 0;
+	position: relative; /* Needed for submenu positioning */
+	flex: 1 1 auto; /* Allow items to shrink and grow */
 }
 
 #navbar ul li a {
-    text-decoration: none;
-    color: #333333;
-    padding: 10px;
-    display: block;
-    font-size: 16px; /* Adjust the text size */
-    white-space: nowrap; /* Prevent text from wrapping */
+	text-decoration: none;
+	color: #333333;
+	padding: 10px;
+	display: block;
+	font-size: 2vw; /* Adjust the text size relative to the viewport width */
+	white-space: nowrap; /* Prevent text from wrapping */
 }
 
 #navbar ul li a:hover {
-    background-color: #6dcee1; /* Change background color on hover */
-    color: #000; /* Change text color on hover */
+	background-color: #6dcee1; /* Change background color on hover */
+	color: #000; /* Change text color on hover */
 }
 
 #navbar ul li ul.submenu {
-    display: none;
-    position: absolute;
-    top: 100%; /* Position below the parent li */
-    left: 0; /* Adjust to align perfectly with the parent menu */
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    background-color: #f4f4f4;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    width: 200px; /* Adjust the width of the submenu */
+	display: none;
+	position: absolute;
+	top: 100%; /* Position below the parent li */
+	left: 0; /* Adjust to align perfectly with the parent menu */
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+	background-color: #f4f4f4;
+	box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+	width: 200px; /* Adjust the width of the submenu */
 }
 
 #navbar ul li:hover ul.submenu {
-    display: block; /* Show submenu on hover */
+	display: block; /* Show submenu on hover */
 }
 
 #navbar ul li ul.submenu li {
-    margin: 0;
-    position: relative; /* Needed for nested submenu positioning */
+	margin: 0;
+	position: relative; /* Needed for nested submenu positioning */
 }
 
 #navbar ul li ul.submenu li a {
-    padding: 10px;
-    display: block;
-    background-color: #f4f4f4;
-    font-size: 12px; /* Adjust the text size for submenu items */
+	padding: 10px;
+	display: block;
+	background-color: #f4f4f4;
+	font-size: 1.5vw; /* Adjust the text size for submenu items relative to the viewport width */
 }
 
 #navbar ul li ul.submenu li a:hover {
-    background-color: #ddd; /* Change background color on hover */
-    color: #000; /* Change text color on hover */
+	background-color: #ddd; /* Change background color on hover */
+	color: #000; /* Change text color on hover */
 }
 
 #navbar ul li ul.submenu li ul.submenu {
-    display: none;
-    top: 0;
-    left: 100%; /* Position to the right of the parent li */
-    width: 200px; /* Adjust the width of the nested submenu */
+	display: none;
+	top: 0;
+	left: 100%; /* Position to the right of the parent li */
+	width: 200px; /* Adjust the width of the nested submenu */
 }
 
 #navbar ul li ul.submenu li:hover ul.submenu {
-    display: block; /* Show nested submenu on hover */
+	display: block; /* Show nested submenu on hover */
 }
 
 /* Ensure submenu is close to parent item to remove hover gap */
 #navbar ul li ul.submenu {
-    top: calc(100% - 1px); /* Slightly overlap the parent menu */
+	top: calc(100% - 1px); /* Slightly overlap the parent menu */
 }
