@@ -1,0 +1,225 @@
+<!DOCTYPE HTML>
+<!--
+  Jimmy Elwes Personal Website
+-->
+<html>
+  <head>
+    <title>Jimmy Elwes</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="icon" type="image/png" href="images/blue_jae.png" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+  </head>
+  <body class="is-preload">
+
+    <nav id="navbar">
+			<ul>
+				<li><a href="index.html#home">Home</a></li>
+				<li><a href="index.html#skills">Skills</a></li>
+				<li><a href="index.html#professional_exp">Professional Experience</a></li>
+				<li><a href="index.html#about">About Me</a></li>
+				<li>
+					<a href="index.html#web">Websites</a>
+					<ul class="submenu">
+						<li><a href="index.html#web">Descriptions</a></li>
+						<li>
+							<a>Direct Links</a>
+							<ul class="submenu">
+								<li><a href="https://www.fpldatamerchant.com/">FPL Data Merchant</a></li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a>Guides</a>
+					<ul class="submenu">
+					  <li><a href="python_set_up.html">Python Project Set Up</a></li>
+					  <li><a href="dash_google_cloud.html">Dash With Google Cloud</a></li>
+					</ul>
+				  </li>
+				<li><a href="index.html#contact">Contact</a></li>
+			</ul>
+		</nav>
+
+<!-- Wrapper -->
+<div class="wrapper style1 align-left">
+    <div class="inner">
+      <h1>Building A Dash App And Deploying it on Google Cloud Run (GCR)&emsp;<a href="https://github.com/Jimmy-Elwes/Dash-App-with-publish-to-GCR/tree/main" class="icon brands style1 fa-github"></a></h1>
+      <h2><a href="https://github.com/Jimmy-Elwes/Dash-App-with-publish-to-GCR/archive/refs/heads/main.zip"> Download Example Files</a></h2>
+      <h2>Prerequisites</h2>
+      <ul>
+        <li>You need a Google Cloud account with a project set up and billing-enabled.</li>
+        <li>You need the GCR CLI installed.</li>
+        <li>You need to have Docker installed locally.</li>
+      </ul>
+      
+      <section>
+        <header>
+          <h2>1. Steps for Setup</h2>
+        </header>
+        <p>When your app is ready and working locally, you can proceed to the next steps. This example uses a simple Dash app with a singular graph. The complexity of the app is not the primary focus of this script.</p>
+        <p>There are two essential parts of the Python code required for your app to work on GCR:</p>
+        <pre class="code">
+          # Create a Dash app
+          app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+  
+          # Expose the Flask instance (required for Gunicorn)
+          # This is super important and app.server is what you call in the docker
+          server = app.server
+        </pre>
+        <p>Additionally, ensure you have the following block at the end of your script to bind the app to the correct port for Google Cloud Run:</p>
+        <pre class="code">
+          if __name__ == '__main__':
+            port = int(os.environ.get("PORT", 8080))
+            app.run_server(host='0.0.0.0', port=port)
+        </pre>
+        <p>Once you have your app running, open the terminal in the app's directory and test it works by running:</p>
+        <pre class="code">
+          python app.py
+        </pre>
+      </section>
+      
+      <section>
+        <header>
+          <h2>2. Check or Build the Dockerfile</h2>
+        </header>
+        <p>Docker Image: Think of a Docker image like a blueprint or a recipe. It's a file that contains everything your app needs to run, including the app code, system libraries, and dependencies (like Python or Dash). But, it's not running yet—it's just the instructions.</p>
+        <p>Docker Container: A Docker container is like a fully built version of that image, now "alive" and running. It uses the blueprint (the image) to run your app in a completely isolated environment, so it works the same no matter where it's running—on your computer, in the cloud, or anywhere else.</p>
+        <p>Ensure your <code>Dockerfile</code> is correctly set up to build the Dash app with Gunicorn. Here's an example of what the <code>Dockerfile</code> should look like:</p>
+        <pre class="code">
+          # Use the official Python image from the Docker Hub
+          FROM python:3.11-slim
+  
+          # Set the working directory in the container
+          WORKDIR /app
+  
+          # Copy the current directory contents into the container at /app
+          COPY . /app
+  
+          # Install any needed packages specified in requirements.txt
+          RUN pip install --no-cache-dir -r requirements.txt
+  
+          # Make port 8080 available to the world outside this container
+          EXPOSE 8080
+  
+          # Define environment variable for the port (needed for Cloud Run)
+          ENV PORT=8080
+  
+          # Run the application with Gunicorn
+          CMD ["gunicorn", "-b", ":8080", "app:app"]
+        </pre>
+      </section>
+      
+      <section>
+        <header>
+          <h2>3. Build the Docker Image</h2>
+        </header>
+        <p>Now, build the Docker image locally. Ensure Docker is running on your machine and execute the following command:</p>
+        <pre class="code">docker build -t my-dash-app:latest .</pre>
+        <p>This will build the Docker image and tag it as <code>my-dash-app:latest</code>. Tags are important for keeping version control of the Docker image.</p>
+      </section>
+      
+      <section>
+        <header>
+          <h2>4. Run the Docker Container Locally</h2>
+        </header>
+        <p>Run the container locally using the following command:</p>
+        <pre class="code">docker run -p 8080:8080 my-dash-app:latest</pre>
+        <p>This will run the container and expose port <code>8080</code>. Once it’s running, open <a href="http://127.0.0.1:8080/">http://127.0.0.1:8080/</a> in your browser to check if the app is accessible.</p>
+      </section>
+  
+      <section>
+        <header>
+          <h2>5. Troubleshooting – Skip if Successful</h2>
+        </header>
+        <p>If you're having issues, you can use the following command to access the container's shell for additional debugging:</p>
+        <pre class="code">docker run -it my-dash-app:latest /bin/bash</pre>
+        <p>Make necessary changes and rebuild the Docker image. Anytime you change something, you must rebuild the Docker image.</p>
+      </section>
+  
+      <section>
+        <header>
+          <h2>6. Clean up Local Docker Files (USE WITH CAUTION)</h2>
+        </header>
+        <p>If you need to clean up Docker images to free up space, proceed with caution as this can remove valuable images. To remove all dangling images (untagged images):</p>
+        <pre class="code">docker image prune</pre>
+        <p>To remove all unused images, even if they are tagged:</p>
+        <pre class="code">docker image prune -a</pre>
+      </section>
+  
+      <section>
+        <header>
+          <h2>7. Tag Your Docker Image for Google Container Registry (GCR)</h2>
+        </header>
+        <p>Before deploying to Cloud Run, you’ll need to push your Docker image to Google Container Registry (GCR). First, tag the image with the GCR registry location. Replace <code>[PROJECT-ID]</code> with your actual Google Cloud project ID:</p>
+        <pre class="code">docker tag my-dash-app gcr.io/[PROJECT-ID]/my-dash-app:latest</pre>
+      </section>
+  
+      <section>
+        <header>
+          <h2>8. Push the Docker Image to GCR</h2>
+        </header>
+        <p>Once the image is tagged, push it to Google Container Registry:</p>
+        <pre class="code">docker push gcr.io/[PROJECT-ID]/my-dash-app:latest</pre>
+      </section>
+  
+      <section>
+        <header>
+          <h2>9. Deploy to Google Cloud Run</h2>
+        </header>
+        <p>Once the image is in GCR, you can deploy it to Cloud Run:</p>
+        <pre class="code">
+  gcloud run deploy my-dash-app --image gcr.io/[PROJECT-ID]/my-dash-app:latest --platform managed --region [REGION] --allow-unauthenticated --port 8080
+        </pre>
+      </section>
+  
+      <section>
+        <header>
+          <h2>10. Access the App</h2>
+        </header>
+        <p>Once the deployment is successful, Cloud Run will give you a URL where you can access your Dash app. You can retrieve the URL with:</p>
+        <pre class="code">gcloud run services describe my-dash-app --platform managed --region [REGION] --format 'value(status.url)'</pre>
+      </section>
+  
+      <section>
+        <header>
+          <h2>11. Optional: Monitor and Scale the App</h2>
+        </header>
+        <p>Google Cloud Run automatically scales your app based on traffic. However, you can also set minimum and maximum instance counts or configure autoscaling:</p>
+        <pre class="code">gcloud run services update my-dash-app --min-instances 1 --max-instances 10</pre>
+      </section>
+  
+      <section>
+        <header>
+          <h2>12. Cloud Build YAML</h2>
+        </header>
+        <p>Alternatively, you can use a cloud build YAML file to go through the steps automatically:</p>
+        <pre class="code">
+  steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/[project-id]/my-dash-app', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/[project-id]/my-dash-app']
+  
+  # Deploy the image to Google Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['run', 'deploy', 'my-dash-app',
+           '--image', 'gcr.io/[project-id]/my-dash-app',
+           '--region', 'us-central1',
+           '--platform', 'managed',
+           '--allow-unauthenticated']
+  images:
+  - gcr.io/[project-id]/my-dash-app
+        </pre>
+      </section>
+  
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/jquery.scrollex.min.js"></script>
+	<script src="assets/js/jquery.scrolly.min.js"></script>
+	<script src="assets/js/browser.min.js"></script>
+	<script src="assets/js/breakpoints.min.js"></script>
+	<script src="assets/js/util.js"></script>
+	<script src="assets/js/main.js"></script>
+</body>
+</html>
