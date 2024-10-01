@@ -8639,6 +8639,13 @@ pre.code {
 	padding: 10px;
 	display: block;
 	font-size: 2vw; /* Adjust the text size relative to the viewport width */
+	text-align: center; /* Align the text to the center */
+}
+
+@media screen and (min-width: 600px) {
+	#navbar ul li a {
+		font-size: 14px; /* Set the maximum font size */
+	}
 	white-space: nowrap; /* Prevent text from wrapping */
 }
 
@@ -8674,6 +8681,7 @@ pre.code {
 	display: block;
 	background-color: #f4f4f4;
 	font-size: 1.5vw; /* Adjust the text size for submenu items relative to the viewport width */
+	font-size: 10px; /* Set the maximum font size */
 }
 
 #navbar ul li ul.submenu li a:hover {
